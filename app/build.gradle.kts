@@ -1,4 +1,4 @@
-val checkstyleVersion = "12.1.1"
+val checkstyleVersion = "13.0.0"
 val lombokVersion = "1.18.42"
 val junitBomVersion = "5.10.0"
 
