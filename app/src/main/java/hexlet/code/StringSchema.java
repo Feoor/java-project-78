@@ -1,6 +1,6 @@
 package hexlet.code;
 
-public class StringSchema extends BaseSchema<String> {
+public final class StringSchema extends BaseSchema<String> {
 
     public StringSchema() {
         super();
@@ -12,17 +12,17 @@ public class StringSchema extends BaseSchema<String> {
     }
 
     public StringSchema required() {
-        checks.put("required", value -> !isAnyEmpty(value));
+        addCheck("required", value -> !isAnyEmpty(value));
         return this;
     }
 
     public StringSchema minLength(int length) {
-        checks.put("minLength", value -> value.length() >= length);
+        addCheck("minLength", value -> value.length() >= length);
         return this;
     }
 
     public StringSchema contains(String substring) {
-        checks.put("contains", value -> value.contains(substring));
+        addCheck("contains", value -> value.contains(substring));
         return this;
     }
 }

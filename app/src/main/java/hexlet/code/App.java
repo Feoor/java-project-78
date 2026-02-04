@@ -24,7 +24,7 @@ public class App {
         schema.isValid("what does the fox say"); // false
         // Здесь уже false, так как добавлена еще одна проверка contains("whatthe")
 
-        // Если один валидатор вызывался несколько раз
+        // Если один валидатор вызывался несколько раз,
         // то последний имеет приоритет (перетирает предыдущий)
         var schema1 = v.string();
         schema1.minLength(10).minLength(4).isValid("Hexlet"); // true

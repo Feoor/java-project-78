@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class StringSchemaTest {
+public final class StringSchemaTest {
     private StringSchema schema;
-    private static final String text = "what does the fox say";
+    private static final String TEXT = "what does the fox say";
+    private static final int MIN_LENGTH = 5;
+    private static final int OVERWRITE_LENGTH = 10;
 
     @BeforeEach
     void setUp() {
@@ -18,14 +20,14 @@ public class StringSchemaTest {
     @Test
     void testStringSchema() {
         schema.required();
-        assertTrue(schema.isValid(text)); // true
+        assertTrue(schema.isValid(TEXT)); // true
 
-        schema.minLength(5).contains("hex");
+        schema.minLength(MIN_LENGTH).contains("hex");
         assertTrue(schema.isValid("hexlet")); // true
 
-        assertTrue(schema.contains("wh").isValid(text)); // true
-        assertTrue(schema.contains("what").isValid(text)); // true
-        assertFalse(schema.contains("whatthe").isValid(text)); // false
+        assertTrue(schema.contains("wh").isValid(TEXT)); // true
+        assertTrue(schema.contains("what").isValid(TEXT)); // true
+        assertFalse(schema.contains("whatthe").isValid(TEXT)); // false
         assertFalse(schema.isValid("")); // false
     }
 
@@ -41,28 +43,28 @@ public class StringSchemaTest {
 
     @Test
     void testChain() {
-        assertTrue(schema.required().minLength(5).contains("hex").isValid("hexlet")); // true
-        assertFalse(schema.required().minLength(5).contains("what").isValid("what")); // false by minLength
+        assertTrue(schema.required().minLength(MIN_LENGTH).contains("hex").isValid("hexlet")); // true
+        assertFalse(schema.required().minLength(MIN_LENGTH).contains("what").isValid("what")); // false by minLength
     }
 
     @Test
     void testWithOverwrite() {
-        assertTrue(schema.minLength(10).minLength(5).isValid("Hexlet")); // true
-        assertTrue(schema.contains("hex").contains("what").isValid(text)); // true
+        assertTrue(schema.minLength(OVERWRITE_LENGTH).minLength(MIN_LENGTH).isValid("Hexlet")); // true
+        assertTrue(schema.contains("hex").contains("what").isValid(TEXT)); // true
 
-        assertFalse(schema.minLength(4).minLength(10).isValid("Hexlet")); // false
-        assertFalse(schema.contains("wh").contains("whatthe").isValid(text)); // false
+        assertFalse(schema.minLength(MIN_LENGTH).minLength(OVERWRITE_LENGTH).isValid("Hexlet")); // false
+        assertFalse(schema.contains("wh").contains("whatthe").isValid(TEXT)); // false
     }
 
     @Test
     void testWithEmptyContains() {
-        assertTrue(schema.contains("").isValid(text));
+        assertTrue(schema.contains("").isValid(TEXT));
     }
 
     @Test
     void testWithTwoSchemes() {
         schema.required();
-        StringSchema schema2 = schema.minLength(5);
+        StringSchema schema2 = schema.minLength(MIN_LENGTH);
 
         assertFalse(schema2.isValid("one")); // false
         assertFalse(schema.isValid("one")); // false
