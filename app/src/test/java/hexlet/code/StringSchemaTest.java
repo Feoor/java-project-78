@@ -40,6 +40,12 @@ public class StringSchemaTest {
     }
 
     @Test
+    void testChain() {
+        assertTrue(schema.required().minLength(5).contains("hex").isValid("hexlet")); // true
+        assertFalse(schema.required().minLength(5).contains("what").isValid("what")); // false by minLength
+    }
+
+    @Test
     void testWithOverwrite() {
         assertTrue(schema.minLength(10).minLength(5).isValid("Hexlet")); // true
         assertTrue(schema.contains("hex").contains("what").isValid(text)); // true
