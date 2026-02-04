@@ -35,9 +35,6 @@ repositories {
 }
 
 dependencies {
-    // checkstyle
-    implementation("com.puppycrawl.tools:checkstyle:$checkstyleVersion")
-
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
