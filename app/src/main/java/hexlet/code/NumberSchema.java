@@ -2,7 +2,7 @@ package hexlet.code;
 
 import java.util.Objects;
 
-public class NumberSchema extends BaseSchema<Number> {
+public final class NumberSchema extends BaseSchema<Number> {
 
     public NumberSchema() {
         super();
@@ -24,6 +24,10 @@ public class NumberSchema extends BaseSchema<Number> {
     }
 
     public NumberSchema range(Number min, Number max) {
+        if (min.doubleValue() > max.doubleValue()) {
+            throw new IllegalArgumentException("Min value must be less than max value");
+        }
+
         addCheck("range", value -> value.doubleValue() >= min.doubleValue()
                 && value.doubleValue() <= max.doubleValue());
         return this;
