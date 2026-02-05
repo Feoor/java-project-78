@@ -6,39 +6,41 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class NumberSchemaTest {
+    private static final int MIN_VALUE = 10;
+    private static final int MAX_VALUE = 20;
 
     @Test
     void testRangeWithinBounds() {
         NumberSchema schema = new NumberSchema();
-        schema.range(10, 20);
+        schema.range(MIN_VALUE, MAX_VALUE);
         assertTrue(schema.isValid(15)); // 15 is within 10 and 20
     }
 
     @Test
     void testRangeAtLowerBound() {
         NumberSchema schema = new NumberSchema();
-        schema.range(10, 20);
+        schema.range(MIN_VALUE, MAX_VALUE);
         assertTrue(schema.isValid(10)); // 10 is the lower bound, valid
     }
 
     @Test
     void testRangeAtUpperBound() {
         NumberSchema schema = new NumberSchema();
-        schema.range(10, 20);
+        schema.range(MIN_VALUE, MAX_VALUE);
         assertTrue(schema.isValid(20)); // 20 is the upper bound, valid
     }
 
     @Test
     void testRangeBelowBounds() {
         NumberSchema schema = new NumberSchema();
-        schema.range(10, 20);
+        schema.range(MIN_VALUE, MAX_VALUE);
         assertFalse(schema.isValid(5)); // 5 is below the lower bound, invalid
     }
 
     @Test
     void testRangeAboveBounds() {
         NumberSchema schema = new NumberSchema();
-        schema.range(10, 20);
+        schema.range(MIN_VALUE, MAX_VALUE);
         assertFalse(schema.isValid(25)); // 25 is above the upper bound, invalid
     }
 

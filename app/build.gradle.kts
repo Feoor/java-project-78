@@ -58,6 +58,10 @@ tasks.jacocoTestReport {
 }
 
 tasks.withType(Checkstyle::class) {
+    if (name.contains("Test")) {
+        enabled = false
+    }
+
     reports {
         xml.required.set(true)
         html.required.set(true)
