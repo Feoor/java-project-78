@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class NumberSchemaTest {
     private static final int MIN_VALUE = 10;
@@ -85,5 +87,12 @@ public final class NumberSchemaTest {
         assertFalse(schema.isValid(-10)); // invalid, not positive
         assertFalse(schema.isValid(0)); // invalid, not positive
         assertFalse(schema.isValid(101)); // invalid, above upper bound
+    }
+
+    @Test
+    void testInvalidRange() {
+        NumberSchema schema = new NumberSchema();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> schema.range(10, 5));
+        assertEquals("Min value must be less than max value", exception.getMessage());
     }
 }
