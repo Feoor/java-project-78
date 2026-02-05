@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SuppressWarnings("MagicNumber")
 public final class NumberSchemaTest {
     private static final int MIN_VALUE = 10;
     private static final int MAX_VALUE = 20;
