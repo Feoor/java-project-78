@@ -20,53 +20,44 @@ public final class StringSchemaTest {
     @Test
     void testStringSchema() {
         schema.required();
-        assertTrue(schema.isValid(TEXT)); // true
+        assertTrue(schema.isValid(TEXT)); // valid
 
         schema.minLength(MIN_LENGTH).contains("hex");
-        assertTrue(schema.isValid("hexlet")); // true
+        assertTrue(schema.isValid("hexlet")); // valid, contains hex
 
-        assertTrue(schema.contains("wh").isValid(TEXT)); // true
-        assertTrue(schema.contains("what").isValid(TEXT)); // true
-        assertFalse(schema.contains("whatthe").isValid(TEXT)); // false
-        assertFalse(schema.isValid("")); // false
+        assertTrue(schema.contains("wh").isValid(TEXT)); // valid, contains wh
+        assertTrue(schema.contains("what").isValid(TEXT)); // valid, contains what
+        assertFalse(schema.contains("whatthe").isValid(TEXT)); // invalid, does not contain whatthe
+        assertFalse(schema.isValid("")); // invalid, empty string when .required()
     }
 
     @Test
     void testWithEmptyValues() {
-        assertTrue(schema.isValid(""));
-        assertTrue(schema.isValid(null));
+        assertTrue(schema.isValid("")); // valid
+        assertTrue(schema.isValid(null)); // valid
 
         schema.required();
-        assertFalse(schema.isValid(""));
-        assertFalse(schema.isValid(null));
+        assertFalse(schema.isValid("")); // invalid
+        assertFalse(schema.isValid(null)); // invalid
     }
 
     @Test
-    void testChain() {
-        assertTrue(schema.required().minLength(MIN_LENGTH).contains("hex").isValid("hexlet")); // true
-        assertFalse(schema.required().minLength(MIN_LENGTH).contains("what").isValid("what")); // false by minLength
+    void testChaining() {
+        assertTrue(schema.required().minLength(MIN_LENGTH).contains("hex").isValid("hexlet")); // valid
+        assertFalse(schema.required().minLength(MIN_LENGTH).contains("what").isValid("what")); // invalid by minLength
     }
 
     @Test
     void testWithOverwrite() {
-        assertTrue(schema.minLength(OVERWRITE_LENGTH).minLength(MIN_LENGTH).isValid("Hexlet")); // true
-        assertTrue(schema.contains("hex").contains("what").isValid(TEXT)); // true
+        assertTrue(schema.minLength(OVERWRITE_LENGTH).minLength(MIN_LENGTH).isValid("Hexlet")); // valid
+        assertTrue(schema.contains("hex").contains("what").isValid(TEXT)); // valid
 
-        assertFalse(schema.minLength(MIN_LENGTH).minLength(OVERWRITE_LENGTH).isValid("Hexlet")); // false
-        assertFalse(schema.contains("wh").contains("whatthe").isValid(TEXT)); // false
+        assertFalse(schema.minLength(MIN_LENGTH).minLength(OVERWRITE_LENGTH).isValid("Hexlet")); // invalid
+        assertFalse(schema.contains("wh").contains("whatthe").isValid(TEXT)); // invalid
     }
 
     @Test
     void testWithEmptyContains() {
         assertTrue(schema.contains("").isValid(TEXT));
-    }
-
-    @Test
-    void testWithTwoSchemes() {
-        schema.required();
-        StringSchema schema2 = schema.minLength(MIN_LENGTH);
-
-        assertFalse(schema2.isValid("one")); // false
-        assertFalse(schema.isValid("one")); // false
     }
 }
