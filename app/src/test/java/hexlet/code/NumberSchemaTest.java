@@ -1,54 +1,41 @@
 package hexlet.code;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public final class NumberSchemaTest {
+final class NumberSchemaTest {
+    private NumberSchema schema;
     private static final int MIN_VALUE = 10;
     private static final int MAX_VALUE = 20;
 
-    @Test
-    void testRangeWithinBounds() {
-        NumberSchema schema = new NumberSchema();
-        schema.range(MIN_VALUE, MAX_VALUE);
-        assertTrue(schema.isValid(15)); // 15 is within 10 and 20
+    @BeforeEach
+    void setUp() {
+        schema = new NumberSchema();
     }
 
-    @Test
-    void testRangeAtLowerBound() {
-        NumberSchema schema = new NumberSchema();
+    @ParameterizedTest
+    @ValueSource(ints = {10, 15, 20})
+    void testRangeWithinBounds(int value) {
         schema.range(MIN_VALUE, MAX_VALUE);
-        assertTrue(schema.isValid(10)); // 10 is the lower bound, valid
+        assertTrue(schema.isValid(value)); // 10, 15, and 20 are within the range, valid
     }
 
-    @Test
-    void testRangeAtUpperBound() {
-        NumberSchema schema = new NumberSchema();
+    @ParameterizedTest
+    @ValueSource(ints = {5, 25})
+    void testRangeWithinBoundsNegative(int value) {
         schema.range(MIN_VALUE, MAX_VALUE);
-        assertTrue(schema.isValid(20)); // 20 is the upper bound, valid
-    }
-
-    @Test
-    void testRangeBelowBounds() {
-        NumberSchema schema = new NumberSchema();
-        schema.range(MIN_VALUE, MAX_VALUE);
-        assertFalse(schema.isValid(5)); // 5 is below the lower bound, invalid
-    }
-
-    @Test
-    void testRangeAboveBounds() {
-        NumberSchema schema = new NumberSchema();
-        schema.range(MIN_VALUE, MAX_VALUE);
-        assertFalse(schema.isValid(25)); // 25 is above the upper bound, invalid
+        assertFalse(schema.isValid(value)); // 5 and 25 are within the range, invalid
     }
 
     @Test
     void testRangeWithNegativeBounds() {
-        NumberSchema schema = new NumberSchema();
         schema.range(-10, 10);
         assertTrue(schema.isValid(0)); // 0 falls within -10 and 10
         assertTrue(schema.isValid(-10)); // -10 is the lower bound
@@ -59,7 +46,6 @@ public final class NumberSchemaTest {
 
     @Test
     void testRangeWithFloatingPointNumbers() {
-        NumberSchema schema = new NumberSchema();
         schema.range(0.5, 2.5);
         assertTrue(schema.isValid(1.5)); // 1.5 is within 0.5 and 2.5
         assertTrue(schema.isValid(0.5)); // 0.5 is the lower bound
@@ -70,8 +56,6 @@ public final class NumberSchemaTest {
 
     @Test
     void testWithNullValue() {
-        NumberSchema schema = new NumberSchema();
-
         assertTrue(schema.isValid(null)); // null should be valid
 
         schema.required();
@@ -80,7 +64,6 @@ public final class NumberSchemaTest {
 
     @Test
     void testChaining() {
-        NumberSchema schema = new NumberSchema();
         schema.required().positive().range(1, 100);
 
         assertTrue(schema.isValid(50)); // valid
@@ -91,7 +74,6 @@ public final class NumberSchemaTest {
 
     @Test
     void testInvalidRange() {
-        NumberSchema schema = new NumberSchema();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> schema.range(10, 5));
         assertEquals("Min value must be less than max value", exception.getMessage());
     }

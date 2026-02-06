@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public final class StringSchemaTest {
+final class StringSchemaTest {
     private StringSchema schema;
     private static final String TEXT = "what does the fox say";
     private static final int MIN_LENGTH = 5;

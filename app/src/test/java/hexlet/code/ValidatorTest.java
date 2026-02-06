@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public final class ValidatorTest {
+final class ValidatorTest {
     private Validator validator;
     private static final int MIN_LENGTH = 5;
 
