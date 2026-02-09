@@ -15,23 +15,17 @@ public final class MapSchema extends BaseSchema<Map<?, ?>> {
 
     @SuppressWarnings("unchecked")
     public void shape(Map<String, ? extends BaseSchema<?>> schemas) {
-        addCheck("shape", value -> {
-            if (value == null) {
-                return true;
-            }
+        addCheck("shape", value -> schemas.entrySet().stream()
+                .allMatch(entry -> {
+                    String key = entry.getKey();
 
-            return schemas.entrySet().stream()
-                    .allMatch(entry -> {
-                        String key = entry.getKey();
+                    //noinspection rawtypes
+                    BaseSchema schema = entry.getValue();
 
-                        //noinspection rawtypes
-                        BaseSchema schema = entry.getValue();
+                    Object dataValue = value.get(key);
 
-                        Object dataValue = value.get(key);
-
-                        return schema.isValid(dataValue);
-                    });
-        });
+                    return schema.isValid(dataValue);
+                }));
     }
 
     public MapSchema required() {
