@@ -2,7 +2,7 @@ package hexlet.code;
 
 import org.junit.jupiter.api.Test;
 
-public class AppTest {
+class AppTest {
     @Test
     void testApp() {
         App.main(null);
