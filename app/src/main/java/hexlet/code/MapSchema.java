@@ -13,6 +13,27 @@ public final class MapSchema extends BaseSchema<Map<?, ?>> {
         return value == null;
     }
 
+    @SuppressWarnings("unchecked")
+    public void shape(Map<String, ? extends BaseSchema<?>> schemas) {
+        addCheck("shape", value -> {
+            if (value == null) {
+                return true;
+            }
+
+            return schemas.entrySet().stream()
+                    .allMatch(entry -> {
+                        String key = entry.getKey();
+
+                        //noinspection rawtypes
+                        BaseSchema schema = entry.getValue();
+
+                        Object dataValue = value.get(key);
+
+                        return schema.isValid(dataValue);
+                    });
+        });
+    }
+
     public MapSchema required() {
         addCheck("required", Objects::nonNull);
         return this;

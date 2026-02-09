@@ -27,7 +27,7 @@ final class MapSchemaTest {
 
     @Test
     void testIsAnyEmptyWithEmptyMap() {
-        Map<Object, Object> emptyMap = new HashMap<>();
+        Map<String, String> emptyMap = new HashMap<>();
 
         assertTrue(schema.isValid(emptyMap)); // an empty map should be valid
 
@@ -37,7 +37,7 @@ final class MapSchemaTest {
 
     @Test
     void testIsAnyEmptyWithNonEmptyMap() {
-        Map<Object, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("key", "value");
 
         assertTrue(schema.isValid(map)); // a non-empty map should be valid
@@ -48,7 +48,7 @@ final class MapSchemaTest {
 
     @Test
     void testSizeofWithMatchingSize() {
-        Map<Object, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("key1", "value1");
         map.put("key2", "value2");
 
@@ -58,7 +58,7 @@ final class MapSchemaTest {
 
     @Test
     void testSizeofWithNonMatchingSize() {
-        Map<Object, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("key1", "value1");
 
         schema.sizeof(2);
@@ -67,7 +67,7 @@ final class MapSchemaTest {
 
     @Test
     void testWithEmptyMapAndSizeConstraint() {
-        Map<Object, Object> emptyMap = new HashMap<>();
+        Map<String, String> emptyMap = new HashMap<>();
 
         schema.sizeof(0);
         assertTrue(schema.isValid(emptyMap)); // valid because a map is empty and the size is 0
@@ -92,8 +92,34 @@ final class MapSchemaTest {
     }
 
     @Test
+    void testMapShapes() {
+        Validator v = new Validator();
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+
+        schemas.put("firstName", v.string().required()); // the firstName is required
+        schemas.put("lastName", v.string().required().minLength(2)); // lastName is required and at least 2 chars long
+
+        schema.shape(schemas);
+
+        Map<String, String> human1 = new HashMap<>();
+        human1.put("firstName", "John");
+        human1.put("lastName", "Smith");
+        assertTrue(schema.isValid(human1));
+
+        Map<String, String> human2 = new HashMap<>();
+        human2.put("firstName", "John");
+        human2.put("lastName", null);
+        assertFalse(schema.isValid(human2));
+
+        Map<String, String> human3 = new HashMap<>();
+        human3.put("firstName", "Anna");
+        human3.put("lastName", "B");
+        assertFalse(schema.isValid(human3));
+    }
+
+    @Test
     void testChainingRequiredAndSizeof() {
-        Map<Object, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("key1", "value1");
         map.put("key2", "value2");
 
